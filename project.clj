@@ -157,6 +157,7 @@
   :jvm-opts
   ["-XX:+IgnoreUnrecognizedVMOptions"                                 ; ignore things not recognized for our Java version instead of refusing to start
    "-Xverify:none"                                                    ; disable bytecode verification when running in dev so it starts slightly faster
+   "-Dmail.mime.splitlongparameters=false"                            ; don't wrap attachment filenames across multiple lines (c.f. #11879)
    "-Djava.awt.headless=true"]                                        ; prevent Java icon from randomly popping up in dock when running `lein ring server`
 
   :target-path "target/%s"

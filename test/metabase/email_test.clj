@@ -1,7 +1,7 @@
 (ns metabase.email-test
   "Various helper functions for testing email functionality."
   ;; TODO - Move to something like `metabase.test.util.email`?
-  (:require [expectations :refer :all]
+  (:require [clojure.test :refer :all]
             [medley.core :as m]
             [metabase.email :as email]
             [metabase.test.data.users :as user]
@@ -139,16 +139,17 @@
                     email-map)]}))
 
 ;; simple test of email sending capabilities
-(expect
-  [{:from    (email/email-from-address)
-    :to      ["test@test.com"]
-    :subject "101 Reasons to use Metabase"
-    :body    [{:type    "text/html; charset=utf-8"
-               :content "101. Metabase will make you a better person"}]}]
-  (with-fake-inbox
-    (email/send-message!
-      :subject      "101 Reasons to use Metabase"
-      :recipients   ["test@test.com"]
-      :message-type :html
-      :message      "101. Metabase will make you a better person")
-    (@inbox "test@test.com")))
+(deftest send-message!-test
+  (is (=
+       [{:from    (email/email-from-address)
+         :to      ["test@test.com"]
+         :subject "101 Reasons to use Metabase"
+         :body    [{:type    "text/html; charset=utf-8"
+                    :content "101. Metabase will make you a better person"}]}]
+       (with-fake-inbox
+         (email/send-message!
+           :subject      "101 Reasons to use Metabase"
+           :recipients   ["test@test.com"]
+           :message-type :html
+           :message      "101. Metabase will make you a better person")
+         (@inbox "test@test.com")))))
